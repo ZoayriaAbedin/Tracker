@@ -43,6 +43,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,15 +116,22 @@ fun HabitChartsScreen(viewModel: HabitViewModel) {
     }
 }
 
+class SecondsValueFormatter : ValueFormatter() {
+    override fun getFormattedValue(value: Float): String {
+        return "${value}s"
+    }
+}
+
 @Composable
 fun PieChart(habitsByCategory: List<HabitByCategory>, modifier: Modifier = Modifier) {
     val textColor = if (isSystemInDarkTheme()) android.graphics.Color.WHITE else android.graphics.Color.BLACK
     AndroidView(factory = { context ->
         PieChart(context).apply {
-            val entries = habitsByCategory.map { PieEntry((it.duration / 1000).toFloat(), it.categoryName) }
+            val entries = habitsByCategory.map { PieEntry(it.duration.toFloat(), it.categoryName) }
             val dataSet = PieDataSet(entries, "Habits by Category")
             dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
             dataSet.valueTextColor = textColor
+            dataSet.valueFormatter = SecondsValueFormatter()
             data = PieData(dataSet)
             legend.textColor = textColor
             setUsePercentValues(true)
@@ -138,17 +146,20 @@ fun BarChart(habitsByCategory: List<HabitByCategory>, modifier: Modifier = Modif
     val textColor = if (isSystemInDarkTheme()) android.graphics.Color.WHITE else android.graphics.Color.BLACK
     AndroidView(factory = { context ->
         BarChart(context).apply {
-            val entries = habitsByCategory.mapIndexed { index, it -> BarEntry(index.toFloat(), (it.duration / 1000).toFloat()) }
+            val entries = habitsByCategory.mapIndexed { index, it -> BarEntry(index.toFloat(), it.duration.toFloat()) }
             val dataSet = BarDataSet(entries, "Habits by Category")
             dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
             dataSet.valueTextColor = textColor
+            dataSet.valueFormatter = SecondsValueFormatter()
             data = BarData(dataSet)
             xAxis.textColor = textColor
             xAxis.valueFormatter = IndexAxisValueFormatter(habitsByCategory.map { it.categoryName })
             axisLeft.textColor = textColor
             axisLeft.axisMinimum = 0f
+            axisLeft.valueFormatter = SecondsValueFormatter()
             axisRight.textColor = textColor
             axisRight.axisMinimum = 0f
+            axisRight.valueFormatter = SecondsValueFormatter()
             legend.textColor = textColor
             description.isEnabled = false
             isDragEnabled = true
@@ -164,16 +175,19 @@ fun LineChart(habits: List<Habit>, modifier: Modifier = Modifier) {
     val textColor = if (isSystemInDarkTheme()) android.graphics.Color.WHITE else android.graphics.Color.BLACK
     AndroidView(factory = { context ->
         LineChart(context).apply {
-            val entries = habits.map { Entry(it.startTime.time.toFloat(), (it.endTime?.time?.minus(it.startTime.time))?.toFloat()?.div(1000) ?: 0f) }
+            val entries = habits.map { Entry(it.startTime.time.toFloat(), (it.endTime?.time?.minus(it.startTime.time))?.toFloat() ?: 0f) }
             val dataSet = LineDataSet(entries, "Daily Habits")
             dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
             dataSet.valueTextColor = textColor
+            dataSet.valueFormatter = SecondsValueFormatter()
             data = LineData(dataSet)
             xAxis.textColor = textColor
             axisLeft.textColor = textColor
             axisLeft.axisMinimum = 0f
+            axisLeft.valueFormatter = SecondsValueFormatter()
             axisRight.textColor = textColor
             axisRight.axisMinimum = 0f
+            axisRight.valueFormatter = SecondsValueFormatter()
             legend.textColor = textColor
             description.isEnabled = false
             isDragEnabled = true

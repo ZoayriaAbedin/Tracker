@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,10 +36,9 @@ fun HistoryScreen(expenseViewModel: ExpenseViewModel, habitViewModel: HabitViewM
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Text(text = "Expense History", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        LazyColumn(modifier = Modifier.height(300.dp)) {
+        LazyColumn(modifier = Modifier.weight(1f)) {
             items(expenses) { expense ->
                 Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                     Row(modifier = Modifier.padding(16.dp)) {
@@ -55,15 +52,13 @@ fun HistoryScreen(expenseViewModel: ExpenseViewModel, habitViewModel: HabitViewM
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(text = "Habit History", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        LazyColumn(modifier = Modifier.height(300.dp)) {
+        LazyColumn(modifier = Modifier.weight(1f)) {
             items(habits) { habit ->
                 Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                     Row(modifier = Modifier.padding(16.dp)) {
                         val category = habitCategories.find { it.id == habit.categoryId }?.name ?: ""
                         val duration = if (habit.endTime != null) {
-                            val diff = habit.endTime.time - habit.startTime.time
-                            val minutes = diff / 1000 / 60
-                            "$minutes minutes"
+                            "${habit.duration} seconds"
                         } else {
                             "In progress"
                         }
