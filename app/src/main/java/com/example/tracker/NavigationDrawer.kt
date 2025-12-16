@@ -19,6 +19,7 @@ sealed class NavigationItem(val route: String, val icon: Int, val title: String)
     object ExpenseCharts : NavigationItem(Screen.ExpenseCharts.route, R.drawable.ic_charts, "Expense Charts")
     object HabitCharts : NavigationItem(Screen.HabitCharts.route, R.drawable.ic_charts, "Habit Charts")
     object History : NavigationItem(Screen.History.route, R.drawable.ic_history, "History")
+    object Settings : NavigationItem(Screen.Settings.route, R.drawable.ic_settings, "Settings")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -19,6 +19,18 @@ interface ExpenseDao {
     @Delete
     suspend fun delete(expense: Expense)
 
+    @Query("DELETE FROM expenses WHERE date BETWEEN :startDate AND :endDate")
+    suspend fun deleteByDateRange(startDate: Date, endDate: Date)
+
+    @Query("DELETE FROM expenses WHERE categoryId = :categoryId AND date BETWEEN :startDate AND :endDate")
+    suspend fun deleteByCategoryIdAndDateRange(categoryId: Long, startDate: Date, endDate: Date)
+
+    @Query("DELETE FROM expenses")
+    suspend fun deleteAll()
+
+    @Query("DELETE FROM expenses WHERE categoryId = :categoryId")
+    suspend fun deleteByCategoryId(categoryId: Long)
+
     @Query("SELECT * FROM expenses WHERE date BETWEEN :startDate AND :endDate")
     fun getExpensesByDateRange(startDate: Date, endDate: Date): Flow<List<Expense>>
 

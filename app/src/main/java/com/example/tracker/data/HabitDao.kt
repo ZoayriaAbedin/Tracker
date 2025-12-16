@@ -19,6 +19,18 @@ interface HabitDao {
     @Delete
     suspend fun delete(habit: Habit)
 
+    @Query("DELETE FROM habits WHERE startTime BETWEEN :startDate AND :endDate")
+    suspend fun deleteByDateRange(startDate: Date, endDate: Date)
+
+    @Query("DELETE FROM habits WHERE categoryId = :categoryId AND startTime BETWEEN :startDate AND :endDate")
+    suspend fun deleteByCategoryIdAndDateRange(categoryId: Long, startDate: Date, endDate: Date)
+
+    @Query("DELETE FROM habits")
+    suspend fun deleteAll()
+
+    @Query("DELETE FROM habits WHERE categoryId = :categoryId")
+    suspend fun deleteByCategoryId(categoryId: Long)
+
     @Query("SELECT * FROM habits WHERE startTime BETWEEN :startDate AND :endDate")
     fun getHabitsByDateRange(startDate: Date, endDate: Date): Flow<List<Habit>>
 

@@ -9,9 +9,14 @@ import androidx.navigation.compose.composable
 import com.example.tracker.viewmodel.BudgetViewModel
 import com.example.tracker.viewmodel.ExpenseViewModel
 import com.example.tracker.viewmodel.HabitViewModel
+import com.example.tracker.viewmodel.SettingsViewModel
 
 @Composable
-fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
+fun NavGraph(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    settingsViewModel: SettingsViewModel
+) {
     val expenseViewModel: ExpenseViewModel = viewModel()
     val habitViewModel: HabitViewModel = viewModel()
     val budgetViewModel: BudgetViewModel = viewModel()
@@ -37,6 +42,9 @@ fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
         }
         composable(Screen.HabitCharts.route) {
             HabitChartsScreen(viewModel = habitViewModel)
+        }
+        composable(Screen.Settings.route) {
+            SettingsScreen(viewModel = settingsViewModel)
         }
     }
 }
